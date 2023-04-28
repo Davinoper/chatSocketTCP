@@ -23,9 +23,9 @@ class Cliente:
         fim = False
         while fim == False:
             try:
-                mensagem = self.cliente.recv(2048).decode('ascii')
+                mensagem = self.cliente.recv(2048).decode()
                 if mensagem=='getUser':
-                    self.cliente.send(self.identificador.encode('ascii'))
+                    self.cliente.send(self.identificador.encode())
                 else:
                     self.recebidas.append(mensagem)
             except:
@@ -33,7 +33,7 @@ class Cliente:
                 fim = True
 
     def enviarMensagem(self):
-        self.cliente.send(self.mensagem.encode('ascii'))
+        self.cliente.send(self.mensagem.encode())
 
     def sairChat(self):
         self.cliente.close()

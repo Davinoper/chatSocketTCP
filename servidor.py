@@ -19,15 +19,15 @@ def mensagemGlobal(mensagem):
 def tratarCliente(cliente):
     while True:
         try:
-            mensagemRecebidaCliente = cliente.recv(2048).decode('ascii')
-            mensagemGlobal(f'{identificadores[clientes.index(cliente)]} :{mensagemRecebidaCliente}'.encode('ascii'))
+            mensagemRecebidaCliente = cliente.recv(2048).decode()
+            mensagemGlobal(f'{identificadores[clientes.index(cliente)]} :{mensagemRecebidaCliente}'.encode())
         except:
             clienteRetirado = clientes.index(cliente)
             cliente.close()
             clientes.remove(clientes[clienteRetirado])
             identificadorClienteRetirado = identificadores[clienteRetirado]
             print(f'{identificadorClienteRetirado} saiu do chat...')
-            mensagemGlobal(f'{identificadorClienteRetirado} abandonou o grupo...'.encode('ascii'))
+            mensagemGlobal(f'{identificadorClienteRetirado} abandonou o grupo...'.encode())
             identificadores.remove(identificadorClienteRetirado)
         
 def conexaoInicial():
@@ -36,10 +36,10 @@ def conexaoInicial():
             cliente, endereco = servidor.accept()
             print(f"Nova conexão: {str(endereco)}")
             clientes.append(cliente)
-            cliente.send('getUser'.encode('ascii'))
-            idCliente = cliente.recv(2048).decode('ascii')
+            cliente.send('getUser'.encode())
+            idCliente = cliente.recv(2048).decode()
             identificadores.append(idCliente)
-            mensagemGlobal(f'{idCliente} juntou-se ao grupo'.encode('ascii'))
+            mensagemGlobal(f'{idCliente} juntou-se ao grupo'.encode())
             threadUsuario = threading.Thread(target=tratarCliente,args=(cliente,))
             threadUsuario.start()
         except:

@@ -15,7 +15,8 @@ class Application:
         self.coneccao = Tk()
         self.chat = Toplevel(master=None)
         self.threadAtualizar = threading.Thread(target=self.atualizarChat, args=())
-        
+
+        self.coneccao.title("Coneccao") 
         self.coneccao.resizable(True,True)
         self.coneccao.minsize(width = 500, height = 400) 
         self.coneccao.maxsize(width = 1000, height = 1000) 
@@ -39,6 +40,11 @@ class Application:
         self.sextoContainer["padx"] = 20
         self.sextoContainer["pady"] = 5
         self.sextoContainer.pack()
+
+        self.setimoContainer = Frame(master)
+        self.setimoContainer["padx"] = 20
+        self.setimoContainer["pady"] = 5
+        self.setimoContainer.pack()
        
         self.ipLabel = Label(self.terceiroContainer,text="Ip do sevidor: ", font=self.fontePadrao)
         self.ipLabel.pack(side=LEFT)
@@ -66,6 +72,9 @@ class Application:
         self.conectar["width"] = 10
         self.conectar["command"] = self.conexao
         self.conectar.pack(side=RIGHT)
+
+        self.avisoLabel = Label(self.setimoContainer, text=" ", font=self.fontePadrao)
+        self.avisoLabel.pack(side=LEFT)
 
         self.chat.title("chat") 
         self.chat.geometry("500x400") 
@@ -126,15 +135,17 @@ class Application:
         self.identificador.delete(0,'end')
 
     def conexao(self):
-        self.cliente.IP = self.ip.get()
-        self.cliente.PORTA = int(self.porta.get())
-        self.cliente.identificador = self.identificador.get()
         try:
+            self.cliente.IP = self.ip.get()
+            self.cliente.PORTA = int(self.porta.get())
+            self.cliente.identificador = self.identificador.get()
             self.cliente.conectarServer()
             self.cliente.thread1.start()
             self.threadAtualizar.start()
             self.coneccao.withdraw()
         except Exception:
+            self.avisoLabel["text"] = "Erro de conexão, tente novamente"
+            self.avisoLabel["background"] = 'red'
             self.limparCampos()
    
 app = Application()
